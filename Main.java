@@ -7,11 +7,12 @@ import java.util.Scanner;
  * Ing. Douglas Barrios
  * @author: Marcelo Detlefsen, Jose Rivera, Fabián Prado
  * Creación: 01/03/2025
- * última modificación: 01/03/2025
+ * última modificación: 11/03/2025
  * File Name: Main.java
  * Descripción: Clase principal que utiliza el Lexer para:
- *   1) Determinar si la expresión LISP es correcta 
- *   2) Listar los elementos (tokens) generados
+ * 1. Tokenizar la expresión LISP.
+ * 2. Verificar si la expresión está balanceada.
+ * 3. Crear un AST a partir de los tokens.
  */
 
 public class Main 
@@ -55,7 +56,7 @@ public class Main
         // Al estar correcta, tokenizamos la expresion de LISP
         List<Token> tokens = lexer.tokenize(code);
 
-        // Imprimimos la lista de tokens
+        // Asi se imprime la lista, pero se modificará
         String placeHolder = code.replace("(", "[").replace(")", "]");  
         System.out.println(placeHolder);
         if (tokens.isEmpty()) {
@@ -71,5 +72,7 @@ public class Main
             System.out.println();
         }
         scanner.close();
+
+        //Aqui se utilizará el Parser para los tokens y se creará el AST
     }
 }
