@@ -14,26 +14,54 @@ import java.util.List;
 
 public class ASTNode 
 {
+    /**
+     * Valor del nodo. Puede representar un operador, número o símbolo.
+     */
     private String value;
+    /**
+     * Lista de nodos hijos de este nodo.
+     */
     private List<ASTNode> children;
 
+    /*
+     * constructor
+     */
     public ASTNode(String value) {
         this.value = value;
         this.children = new ArrayList<>();
     }
 
+    /**
+     * agrega un nodo hijo a la lista de este nodo.
+     * @param child El nodo hijo a agregar
+     */
     public void addChild(ASTNode child) {
         this.children.add(child);
     }
 
+    /**
+     * Obtiene el valor del nodo.
+     *
+     * @return El valor del nodo como una cadena de texto.
+     */
     public String getValue() {
         return value;
     }
 
+    /**
+     * Obtiene la lista de nodos hijos de este nodo.
+     *
+     * @return Una lista de nodos hijos.
+     */
     public List<ASTNode> getChildren() {
         return children;
     }
 
+    /**
+     * Devuelve una representación en forma de cadena del nodo y sus hijos.
+     *
+     * @return Una representación en cadena del nodo en formato de árbol.
+     */
     @Override
     public String toString() {
         if (children.isEmpty()) {

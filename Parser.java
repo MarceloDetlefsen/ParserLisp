@@ -20,20 +20,28 @@ public class Parser
     private List<Token> tokens;
     private int currentTokenIndex;
 
+    //Constructor
     public Parser(List<Token> tokens) {
         this.tokens = tokens;
         this.currentTokenIndex = 0;
     }
 
+    //Método que analiza la expresión LISP
     public ASTNode parse() {
         return parseExpression();
     }
 
 
+    /**
+     * Método que analiza una expresión LISP.
+     * convierte las secuencias de tokens en un arbol de sintaxis abstracta
+     * analiza si la expresion en un QUOTE o una operación algebraica 
+     * @return node
+     */
     private ASTNode parseExpression() {
         consume("(");
 
-        if (peek().getValue().equals("QUOTE")) {
+        if (peek().getValue().equals("QUOTE")) { //QUOTE en LISP se usa para citar una expresión y evitar que se evalúe.
 
             consumeAny(); 
             ASTNode quoteNode = new ASTNode("QUOTE");
@@ -46,9 +54,9 @@ public class Parser
             quoteNode.addChild(new ASTNode(sb.toString().trim()));
 
             consume(")");
-            return quoteNode;
+            return quoteNode; // Representa una expresión textual
         }
-        else {
+        else { // si no es quote: 
 
             Token firstToken = consumeAny();
             ASTNode node = new ASTNode(firstToken.getValue());
@@ -64,7 +72,7 @@ public class Parser
             }
 
             consume(")");
-            return node;
+            return node; // devuelve el nodo principal
         }
     }
 
@@ -86,6 +94,13 @@ public class Parser
         }
     }
 
+    /**
+     * verifica si el token actual coincide con el valor esperado
+     * si no coincide, lanza una excepción
+     * si coincide avanza al siguiente token y lo devuelve
+     * @param expectedValue
+     * @return token
+     */
     private Token consume(String expectedValue) {
         Token token = tokens.get(currentTokenIndex);
         if (!token.getValue().equals(expectedValue)) {
@@ -95,10 +110,18 @@ public class Parser
         return token;
     }
 
+    /**
+     * devuelve el token actual y avanza al siguiente en la lista
+     * @return tokens
+     */
     private Token consumeAny() {
         return tokens.get(currentTokenIndex++);
     }
 
+    /**
+     * devuelve el token actual pero no avanza en la lista
+     * @return
+     */
     private Token peek() {
         return tokens.get(currentTokenIndex);
     }

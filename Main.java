@@ -25,6 +25,9 @@ public class Main
         System.out.println("\nIngrese la expresión LISP (puede usar varias líneas).");
         System.out.println("Al terminar de ingresarla, presione Enter en una línea vacía para finalizar:\n");
 
+        /**
+         * ciclo para ejecutar las expresiones LISP (puede usar varias líneas).
+         */
         while (true) {
             String line = scanner.nextLine().trim();
             if (line.isEmpty()) {
@@ -35,6 +38,7 @@ public class Main
 
         String code = codeBuilder.toString().trim();
 
+        // Validar que la expresión contenga paréntesis balanceados
         if (!code.contains("(") || !code.contains(")")) {
             System.out.println("Error: La expresión ingresada no es una expresión válida en LISP (falta de paréntesis).");
             scanner.close();
@@ -52,6 +56,7 @@ public class Main
 
         List<Token> tokens = lexer.tokenize(code);
 
+        // Mostrar la lista de tokens en la expresión LISP
         if (tokens.isEmpty()) {
             System.out.println("No se encontraron tokens en la expresión.");
         } else {
@@ -66,6 +71,9 @@ public class Main
         }
 
         // Parse the tokens into an AST
+        /**
+         * crear el arbol AST
+         */
         Parser parser = new Parser(tokens);
         ASTNode ast = parser.parse();
         System.out.println("Árbol de sintaxis abstracta (AST): " + ast.toString());
