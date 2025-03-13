@@ -1,4 +1,3 @@
-import java.util.ArrayList;
 import java.util.List;
 
 /*
@@ -6,8 +5,8 @@ import java.util.List;
  * Algoritmos y Estructuras de Datos
  * Ing. Douglas Barrios
  * @author: Marcelo Detlefsen, Jose Rivera, Fabián Prado
- * Creación: 12/03/2025
- * última modificación: 12/03/2025
+ * Creación: 01/03/2025
+ * última modificación: 01/03/2025
  * File Name: Parser.java
  * Descripción: Clase que se encarga de analizar la expresión LISP.
  * 
@@ -26,67 +25,81 @@ public class Parser
         this.currentTokenIndex = 0;
     }
 
-    public List<Token> fixErrors(List<Token> tokens) {
-        //Este método se implementará más adelante, para el propósito de esta entrega no es necesario.
-        return tokens;
+    public ASTNode parse() {
+        return parseExpression();
     }
 
-    public List<Token> detectIntent(List<Token> tokens) {
-        //Este método se implementará más adelante, para el propósito de esta entrega no es necesario.
-        return tokens;
+
+    private ASTNode parseExpression() {
+        consume("(");
+
+        if (peek().getValue().equals("QUOTE")) {
+
+            consumeAny(); 
+            ASTNode quoteNode = new ASTNode("QUOTE");
+            StringBuilder sb = new StringBuilder();
+
+            while (!peek().getValue().equals(")")) {
+                sb.append(consumeAny().getValue()).append(" ");
+            }
+
+            quoteNode.addChild(new ASTNode(sb.toString().trim()));
+
+            consume(")");
+            return quoteNode;
+        }
+        else {
+
+            Token firstToken = consumeAny();
+            ASTNode node = new ASTNode(firstToken.getValue());
+
+            while (!peek().getValue().equals(")")) {
+                if (peek().getValue().equals("(")) {
+                    node.addChild(parseExpression());
+                } 
+                else {
+                    String rawValue = consumeAny().getValue();
+                    node.addChild(parseAtom(rawValue));
+                }
+            }
+
+            consume(")");
+            return node;
+        }
     }
 
-    //Implementación pendiente de ASTNode
-
-     //Este método se implementará más adelante, para el propósito de esta entrega no es necesario.
-    public ASTNode optimizeAST(ASTNode ast) {
-        return null;
-    }
-
-     //Este método se implementará más adelante, para el propósito de esta entrega no es necesario.
-    public ASTNode extendSyntax(ASTNode ast) {
-        return null;
-    }
-
-     /**
-      *     Metodo recursivo que Parsear una expresion en Lisp a Python
-      *     @return El objeto parseado
+    /**
+     * parseAtom(String) intenta convertir el valor en un número (int/double).
+     * Si no es número, se queda como string (un símbolo).
      */
-    public Object parse() {
-        // Revisar que se hayan procesado todos los tokens
-        if (currentTokenIndex >= tokens.size()) {
-            return null;
+    private ASTNode parseAtom(String rawValue) {
+        try {
+            int intValue = Integer.parseInt(rawValue);
+            return new ASTNode(String.valueOf(intValue));
+        } catch (NumberFormatException e1) {
+            try {
+                double doubleValue = Double.parseDouble(rawValue);
+                return new ASTNode(String.valueOf(doubleValue));
+            } catch (NumberFormatException e2) {
+                return new ASTNode(rawValue);
+            }
         }
-        
-        Token token = tokens.get(currentTokenIndex);
-        currentTokenIndex++;
-        String value = token.getValue();
-        
-        switch (value) {
-            case "(":
-                List<Object> expression = new ArrayList<>();
-                while (currentTokenIndex < tokens.size() && !tokens.get(currentTokenIndex).getValue().equals(")")) {
-                    expression.add(parse());
-                }
-                return expression;
+    }
 
-            case "QUOTE":
-                Object quotedTokens = parse();
-                return quotedTokens;
-            
-            default:
-                // Si el token es un atom, revisar si el token es un numero, si no, retornar su valor como tal
-                try {
-                    int intValue = Integer.parseInt(value);
-                    return intValue;
-                } catch (NumberFormatException e) {
-                    try {
-                        double doubleValue = Double.parseDouble(value);
-                        return doubleValue;
-                    } catch (NumberFormatException ex) {
-                        return value;
-                    }
-                }
+    private Token consume(String expectedValue) {
+        Token token = tokens.get(currentTokenIndex);
+        if (!token.getValue().equals(expectedValue)) {
+            throw new RuntimeException("Expected " + expectedValue + " but found " + token.getValue());
         }
+        currentTokenIndex++;
+        return token;
+    }
+
+    private Token consumeAny() {
+        return tokens.get(currentTokenIndex++);
+    }
+
+    private Token peek() {
+        return tokens.get(currentTokenIndex);
     }
 }

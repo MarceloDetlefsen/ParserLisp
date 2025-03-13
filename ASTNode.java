@@ -34,9 +34,18 @@ public class ASTNode
         return children;
     }
 
-    //Implementación pendiente de toString
     @Override
     public String toString() {
-        return value;
+        if (children.isEmpty()) {
+            return value;
+        } else {
+            StringBuilder sb = new StringBuilder();
+            sb.append("[").append(value);
+            for (ASTNode child : children) {
+                sb.append(" ").append(child.toString());
+            }
+            sb.append("]");
+            return sb.toString();
+        }
     }
 }
