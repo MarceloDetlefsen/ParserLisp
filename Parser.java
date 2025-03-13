@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.List;
 
 /*
@@ -47,5 +48,45 @@ public class Parser
         return null;
     }
 
-    //Implementación pendiente de Token
+     /**
+      *     Metodo recursivo que Parsear una expresion en Lisp a Python
+      *     @return El objeto parseado
+     */
+    public Object parse() {
+        // Revisar que se hayan procesado todos los tokens
+        if (currentTokenIndex >= tokens.size()) {
+            return null;
+        }
+        
+        Token token = tokens.get(currentTokenIndex);
+        currentTokenIndex++;
+        String value = token.getValue();
+        
+        switch (value) {
+            case "(":
+                List<Object> expression = new ArrayList<>();
+                while (currentTokenIndex < tokens.size() && !tokens.get(currentTokenIndex).getValue().equals(")")) {
+                    expression.add(parse());
+                }
+                return expression;
+
+            case "QUOTE":
+                Object quotedTokens = parse();
+                return quotedTokens;
+            
+            default:
+                // Si el token es un atom, revisar si el token es un numero, si no, retornar su valor como tal
+                try {
+                    int intValue = Integer.parseInt(value);
+                    return intValue;
+                } catch (NumberFormatException e) {
+                    try {
+                        double doubleValue = Double.parseDouble(value);
+                        return doubleValue;
+                    } catch (NumberFormatException ex) {
+                        return value;
+                    }
+                }
+        }
+    }
 }
