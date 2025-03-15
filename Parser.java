@@ -50,26 +50,27 @@ public class Parser
         if (currentTokenIndex >= tokens.size()) {
             throw new RuntimeException("Unexpected end of input");
         }
-
+    
         if (!peek().getValue().equals("(")) {
             throw new RuntimeException("Expected '(' at position " + currentTokenIndex + " but found " + peek().getValue());
         }
-
+    
         consume("(");
-
-        if (peek().getValue().equals("QUOTE")) { //QUOTE en LISP se usa para citar una expresión y evitar que se evalúe.
-            consumeAny(); 
+    
+        if (peek().getValue().equals("QUOTE")) {
+            consumeAny(); // Consume el token QUOTE
             ASTNode quoteNode = new ASTNode("QUOTE");
-            StringBuilder sb = new StringBuilder();
-
-            while (!peek().getValue().equals(")")) {
-                sb.append(consumeAny().getValue()).append(" ");
+            
+            // En lugar de agregar todo como un string, analiza la expresión citada como un subárbol
+            if (peek().getValue().equals("(")) {
+                quoteNode.addChild(parseExpression());
+            } else {
+                // Para casos como (QUOTE symbol)
+                quoteNode.addChild(parseAtom(consumeAny().getValue()));
             }
-
-            quoteNode.addChild(new ASTNode(sb.toString().trim()));
-
+    
             consume(")");
-            return quoteNode; // Representa una expresión textual
+            return quoteNode;
         }
         else { // si no es quote: 
             Token firstToken = consumeAny();
