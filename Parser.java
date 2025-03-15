@@ -6,8 +6,8 @@ import java.util.List;
  * Algoritmos y Estructuras de Datos
  * Ing. Douglas Barrios
  * @author: Marcelo Detlefsen, Jose Rivera, Fabián Prado
- * Creación: 01/03/2025
- * última modificación: 01/03/2025
+ * Creación: 11/03/2025
+ * última modificación: 15/03/2025
  * File Name: Parser.java
  * Descripción: Clase que se encarga de analizar la expresión LISP.
  * 
@@ -151,5 +151,25 @@ public class Parser
         }
 
         return tokens.get(currentTokenIndex);
+    }
+
+    /**
+     * Optimiza el Árbol de Sintaxis Abstracta (AST) para mejorar su eficiencia.
+     * @param ast El nodo raíz del AST a optimizar.
+     * @return El AST optimizado.
+     */
+    public ASTNode optimizeAST(ASTNode ast) {
+        // Este método se implementará más adelante, para el propósito de esta entrega no es necesario.
+        throw new UnsupportedOperationException("Método optimizeAST no implementado aún.");
+    }
+
+    /**
+     * Extiende la sintaxis del AST para soportar características adicionales.
+     * @param ast El nodo raíz del AST a extender.
+     * @return El AST con la sintaxis extendida.
+     */
+    public ASTNode extendSyntax(ASTNode ast) {
+        // Este método se implementará más adelante, para el propósito de esta entrega no es necesario.
+        throw new UnsupportedOperationException("Método extendSyntax no implementado aún.");
     }
 }

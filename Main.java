@@ -7,7 +7,7 @@ import java.util.Scanner;
  * Algoritmos y Estructuras de Datos
  * Ing. Douglas Barrios
  * @author: Marcelo Detlefsen, Jose Rivera, Fabián Prado
- * Creación: 01/03/2025
+ * Creación: 11/03/2025
  * última modificación: 15/03/2025
  * File Name: Main.java
  * Descripción: Clase principal que utiliza el Lexer para:
