@@ -16,6 +16,18 @@ Este convierte los tokens en un árbol de sintaxis abstracta (AST) que represent
     ```bash
     java Main
 
+# Ejemplos para Probar el Programa
+Estos son algunos ejemplos de expresiones LISP que puedes usar para probar el programa:
+
+- `(+ 2 (* V 8))`
+- `(QUOTE (+ 5 2))`
+- `(- 10 5)`
+- `(/ 12 4)`
+- `(+ (* 2 3) (- 10 5))`
+- `(QUOTE (QUOTE (+ 1 2)))`
+- `(IF (> x 3) (+ x 2) (- x 2))`
+- `) + 2 3 (` *(Este último es un ejemplo de entrada inválida para probar el manejo de errores)*
+
 # Autores:
 👨‍💻 Marcelo Detlefsen
 👨‍💻 Jose Rivera
