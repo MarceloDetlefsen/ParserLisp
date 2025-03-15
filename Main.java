@@ -75,8 +75,10 @@ public class Main
          * crear el arbol AST
          */
         Parser parser = new Parser(tokens);
-        ASTNode ast = parser.parse();
-        System.out.println("Árbol de sintaxis abstracta (AST): " + ast.toString());
+        List<ASTNode> astList = parser.parse();
+        for (ASTNode ast : astList) {
+            System.out.println("Árbol de sintaxis abstracta (AST): " + ast.toString());
+        }
 
         scanner.close();
     }

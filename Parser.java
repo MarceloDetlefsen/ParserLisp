@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.List;
 
 /*
@@ -14,7 +15,6 @@ import java.util.List;
  * Código generado con la asistencia de DeepSeek.
  */
 
-
 public class Parser 
 {
     private List<Token> tokens;
@@ -26,11 +26,19 @@ public class Parser
         this.currentTokenIndex = 0;
     }
 
-    //Método que analiza la expresión LISP
-    public ASTNode parse() {
-        return parseExpression();
+    // Método que analiza la expresión LISP
+    public List<ASTNode> parse() {
+        List<ASTNode> expressions = new ArrayList<>();
+        while (currentTokenIndex < tokens.size()) {
+            if (peek().getValue().equals(")")) {
+                // Si encontramos un paréntesis de cierre, lo consumimos y continuamos
+                consume(")");
+                continue;
+            }
+            expressions.add(parseExpression());
+        }
+        return expressions;
     }
-
 
     /**
      * Método que analiza una expresión LISP.
@@ -39,10 +47,17 @@ public class Parser
      * @return node
      */
     private ASTNode parseExpression() {
+        if (currentTokenIndex >= tokens.size()) {
+            throw new RuntimeException("Unexpected end of input");
+        }
+
+        if (!peek().getValue().equals("(")) {
+            throw new RuntimeException("Expected '(' at position " + currentTokenIndex + " but found " + peek().getValue());
+        }
+
         consume("(");
 
         if (peek().getValue().equals("QUOTE")) { //QUOTE en LISP se usa para citar una expresión y evitar que se evalúe.
-
             consumeAny(); 
             ASTNode quoteNode = new ASTNode("QUOTE");
             StringBuilder sb = new StringBuilder();
@@ -57,7 +72,6 @@ public class Parser
             return quoteNode; // Representa una expresión textual
         }
         else { // si no es quote: 
-
             Token firstToken = consumeAny();
             ASTNode node = new ASTNode(firstToken.getValue());
 
@@ -102,6 +116,10 @@ public class Parser
      * @return token
      */
     private Token consume(String expectedValue) {
+        if (currentTokenIndex >= tokens.size()) {
+            throw new RuntimeException("Expected " + expectedValue + " but reached end of input");
+        }
+
         Token token = tokens.get(currentTokenIndex);
         if (!token.getValue().equals(expectedValue)) {
             throw new RuntimeException("Expected " + expectedValue + " but found " + token.getValue());
@@ -115,6 +133,10 @@ public class Parser
      * @return tokens
      */
     private Token consumeAny() {
+        if (currentTokenIndex >= tokens.size()) {
+            throw new RuntimeException("Unexpected end of input");
+        }
+
         return tokens.get(currentTokenIndex++);
     }
 
@@ -123,6 +145,10 @@ public class Parser
      * @return
      */
     private Token peek() {
+        if (currentTokenIndex >= tokens.size()) {
+            throw new RuntimeException("Unexpected end of input");
+        }
+
         return tokens.get(currentTokenIndex);
     }
 }
