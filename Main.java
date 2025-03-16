@@ -7,7 +7,7 @@ import java.util.Scanner;
  * Ing. Douglas Barrios
  * @author: Marcelo Detlefsen, Jose Rivera, Fabián Prado
  * Creación: 11/03/2025
- * última modificación: 15/03/2025
+ * última modificación: 16/03/2025
  * File Name: Main.java
  * Descripción: Clase principal que utiliza el Lexer para:
  * 1. Tokenizar la expresión LISP.
@@ -24,9 +24,7 @@ public class Main
         System.out.println("\nIngrese la expresión LISP (puede usar varias líneas).");
         System.out.println("Al terminar de ingresarla, presione Enter en una línea vacía para finalizar:\n");
 
-        /**
-         * ciclo para ejecutar las expresiones LISP (puede usar varias líneas).
-         */
+        //Ciclo para ejecutar las expresiones LISP (puede usar varias líneas).
         while (true) {
             String line = scanner.nextLine().trim();
             if (line.isEmpty()) {
@@ -57,7 +55,11 @@ public class Main
         // Identificar contenido que no se pudo parsear como expresión válida
         String remainingContent = lexerForFullInput.findInvalidContent(fullInput, expressions);
         if (!remainingContent.trim().isEmpty()) {
-            System.out.println("\nLa siguiente entrada no es una expresión LISP válida: " + remainingContent.trim());
+            // Solo mostramos mensaje de error si hay contenido válido aparte de espacios
+            String trimmedContent = remainingContent.trim();
+            if (!trimmedContent.isEmpty() && !trimmedContent.equals(" ")) {
+                System.out.println("\nLa siguiente entrada no es una expresión LISP válida: " + trimmedContent);
+            }
         }
         
         // Procesa cada expresión individualmente

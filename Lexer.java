@@ -7,7 +7,7 @@ import java.util.regex.*;
  * Ing. Douglas Barrios
  * @author: Marcelo Detlefsen, Jose Rivera, Fabián Prado
  * Creación: 01/03/2025
- * última modificación: 15/03/2025
+ * última modificación: 16/03/2025
  * File Name: Lexer.java
  * Descripción: Clase que se encarga de analizar la expresión LISP.
  * 
@@ -106,16 +106,52 @@ public class Lexer
     
     /**
      * Encuentra el contenido que no pudo ser procesado como expresiones LISP válidas
+     * Este método identifica contenido que no forma parte de ninguna expresión LISP válida
      * 
      * @param fullInput La entrada completa
      * @param validExpressions Lista de expresiones válidas ya identificadas
      * @return El contenido que no forma parte de ninguna expresión válida
      */
     public String findInvalidContent(String fullInput, List<String> validExpressions) {
-        String workingInput = fullInput;
+        // Creamos una copia del texto para marcar las partes válidas
+        StringBuilder result = new StringBuilder(fullInput);
+        
+        // Ordenamos las expresiones por posición de inicio para procesarlas en orden
+        Map<Integer, String> exprPositions = new HashMap<>();
+        
         for (String expr : validExpressions) {
-            workingInput = workingInput.replace(expr, "");
+            int pos = fullInput.indexOf(expr);
+            while (pos >= 0) {
+                // Si la expresión está rodeada por espacios o está al principio/final
+                boolean validStart = (pos == 0 || Character.isWhitespace(fullInput.charAt(pos - 1)));
+                boolean validEnd = (pos + expr.length() == fullInput.length() || 
+                                   Character.isWhitespace(fullInput.charAt(pos + expr.length())));
+                
+                if (validStart && validEnd) {
+                    exprPositions.put(pos, expr);
+                    break;
+                }
+                pos = fullInput.indexOf(expr, pos + 1);
+            }
         }
-        return workingInput;
+        
+        // Ordenamos las posiciones
+        List<Integer> positions = new ArrayList<>(exprPositions.keySet());
+        Collections.sort(positions);
+        
+        // Reemplazamos cada expresión con espacios para mantener los índices correctos
+        for (Integer pos : positions) {
+            String expr = exprPositions.get(pos);
+            for (int i = 0; i < expr.length(); i++) {
+                // Reemplazamos cada caracter con espacio para mantener la longitud
+                result.setCharAt(pos + i, ' ');
+            }
+        }
+        
+        // Eliminamos espacios múltiples
+        String invalidContent = result.toString().trim();
+        invalidContent = invalidContent.replaceAll("\\s+", " ");
+        
+        return invalidContent;
     }
 }
