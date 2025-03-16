@@ -17,14 +17,26 @@ import java.util.regex.*;
 
 public class Lexer 
 {
+    /**
+     * Lista de tokens obtenidos durante el análisis léxico.
+     */
     private List<Token> tokens;
 
-    //Constructor
+    /**
+     * Constructor de la clase Lexer.
+     * Inicializa la lista de tokens vacía.
+     */
     public Lexer() {
         this.tokens = new ArrayList<>();
     }
 
-    // Este método permite comparar patrones de texto
+    /**
+     * Divide una cadena de código en tokens según patrones definidos.
+     * Reconoce paréntesis, palabras, números y operadores aritméticos.
+     *
+     * @param code La cadena de código LISP a analizar
+     * @return Una lista de tokens extraídos del código
+     */
     public List<Token> tokenize(String code) {
         tokens.clear();
         Matcher matcher = Pattern.compile("\\(|\\)|[a-zA-Z]+|[0-9]+|[-+*/]").matcher(code);
@@ -34,17 +46,38 @@ public class Lexer
         return tokens;
     }
 
+    /**
+     * Corrige errores en la lista de tokens.
+     * Este método se implementará en futuras versiones.
+     *
+     * @param tokens Lista de tokens que posiblemente contiene errores
+     * @return Lista de tokens corregida
+     */
     public List<Token> fixErrors(List<Token> tokens) {
-        //Este método se implementará más adelante, para el propósito de esta entrega no es necesario.
+        // Este método se implementará más adelante, para el propósito de esta entrega no es necesario.
         return tokens;
     }
 
+    /**
+     * Analiza la intención del usuario basado en los tokens.
+     * Este método se implementará en futuras versiones.
+     *
+     * @param tokens Lista de tokens a analizar
+     * @return Lista de tokens procesada según la intención detectada
+     */
     public List<Token> detectIntent(List<Token> tokens) {
-        //Este método se implementará más adelante, para el propósito de esta entrega no es necesario.
+        // Este método se implementará más adelante, para el propósito de esta entrega no es necesario.
         return tokens;
     }
 
-    // Este método permite comprobar que la expresión esté equilibrada
+    /**
+     * Verifica si los paréntesis en el código están balanceados.
+     * Un código balanceado tiene el mismo número de paréntesis de apertura y cierre,
+     * y no hay paréntesis de cierre antes de un paréntesis de apertura correspondiente.
+     *
+     * @param code La cadena de código a verificar
+     * @return true si los paréntesis están balanceados, false en caso contrario
+     */
     public boolean isBalanced(String code) {
         int balance = 0;
         for (char c : code.toCharArray()) {
@@ -55,7 +88,13 @@ public class Lexer
         return balance == 0; // si al final el balance es cero, los paréntesis están equilibrados
     }
 
-    //Comprobar que la expresión sea válida
+    /**
+     * Verifica si una lista de tokens representa una expresión LISP válida.
+     * Una expresión LISP válida debe contener al menos un paréntesis y un operador.
+     *
+     * @param tokens Lista de tokens a verificar
+     * @return true si la expresión es válida, false en caso contrario
+     */
     public boolean isValidExpression(List<Token> tokens) {
         boolean hasParentheses = false;
         boolean hasOperators = false;
@@ -105,8 +144,8 @@ public class Lexer
     }
     
     /**
-     * Encuentra el contenido que no pudo ser procesado como expresiones LISP válidas
-     * Este método identifica contenido que no forma parte de ninguna expresión LISP válida
+     * Encuentra el contenido que no pudo ser procesado como expresiones LISP válidas.
+     * Este método identifica contenido que no forma parte de ninguna expresión LISP válida.
      * 
      * @param fullInput La entrada completa
      * @param validExpressions Lista de expresiones válidas ya identificadas
