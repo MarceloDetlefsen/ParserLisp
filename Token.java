@@ -4,7 +4,7 @@
  * Ing. Douglas Barrios
  * @author: Marcelo Detlefsen, Jose Rivera, Fabián Prado
  * Creación: 01/03/2025
- * última modificación: 01/03/2025
+ * última modificación: 03/03/2025
  * File Name: Token.java
  * Descripción: Clase que se encarga de almacenar los tokens de la expresión LISP.
  */

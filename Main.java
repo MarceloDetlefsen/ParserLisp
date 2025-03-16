@@ -1,4 +1,3 @@
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -46,7 +45,7 @@ public class Main
         }
         
         // Divide la entrada en expresiones individuales basadas en paréntesis de nivel superior
-        List<String> expressions = splitExpressions(fullInput);
+        List<String> expressions = lexerForFullInput.splitExpressions(fullInput);
         
         // Verificar si se encontraron expresiones válidas
         if (expressions.isEmpty() && !fullInput.isEmpty()) {
@@ -56,7 +55,7 @@ public class Main
         }
         
         // Identificar contenido que no se pudo parsear como expresión válida
-        String remainingContent = findInvalidContent(fullInput, expressions);
+        String remainingContent = lexerForFullInput.findInvalidContent(fullInput, expressions);
         if (!remainingContent.trim().isEmpty()) {
             System.out.println("\nLa siguiente entrada no es una expresión LISP válida: " + remainingContent.trim());
         }
@@ -122,48 +121,5 @@ public class Main
         }
         
         scanner.close();
-    }
-    
-    /**
-     * Encuentra el contenido que no pudo ser procesado como expresiones LISP válidas
-     * @param fullInput La entrada completa
-     * @param validExpressions Lista de expresiones válidas ya identificadas
-     * @return El contenido que no forma parte de ninguna expresión válida
-     */
-    private static String findInvalidContent(String fullInput, List<String> validExpressions) {
-        String workingInput = fullInput;
-        for (String expr : validExpressions) {
-            workingInput = workingInput.replace(expr, "");
-        }
-        return workingInput;
-    }
-    
-    /**
-     * Divide la entrada en expresiones LISP de nivel superior individuales.
-     * Cada expresión comienza con '(' y termina con su ')' correspondiente.
-     */
-    private static List<String> splitExpressions(String input) {
-        List<String> result = new ArrayList<>();
-        int start = -1;
-        int depth = 0;
-        
-        for (int i = 0; i < input.length(); i++) {
-            char c = input.charAt(i);
-            
-            if (c == '(') {
-                if (depth == 0) {
-                    start = i;
-                }
-                depth++;
-            } else if (c == ')') {
-                depth--;
-                if (depth == 0 && start != -1) {
-                    result.add(input.substring(start, i + 1));
-                    start = -1;
-                }
-            }
-        }
-        
-        return result;
     }
 }
